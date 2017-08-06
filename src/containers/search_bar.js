@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchWeather } from '../actions/index';
 
-export default class SearchBar extends Component {
+class SearchBar extends Component {
 
   constructor(props) {
     super(props);
@@ -25,7 +28,9 @@ export default class SearchBar extends Component {
     // prevents the default behaviour of doing a POST request
     event.preventDefault();
 
-    // we need to go and fetch weather data
+    // we need to go and fetch weather data, using the action creator
+    this.props.fetchWeather(this.state.term);
+    this.setState({ term: '' });
   }
 
   render() {
@@ -47,3 +52,10 @@ export default class SearchBar extends Component {
   }
 
 }
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ fetchWeather }, dispatch);
+}
+
+// first parameter for connect is actually state but we don't care in this case
+export default connect(null, mapDispatchToProps)(SearchBar);
